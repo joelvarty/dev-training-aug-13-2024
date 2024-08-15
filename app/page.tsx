@@ -7,5 +7,5 @@ export {generateMetadata} from "./[...slug]/page"
 export {default} from "./[...slug]/page"
 
 export const revalidate = cacheConfig.pathRevalidateDuration
-export const runtime = "nodejs"
-export const dynamic = "force-static"
+// export const runtime = "nodejs"
+// export const dynamic = "force-static"

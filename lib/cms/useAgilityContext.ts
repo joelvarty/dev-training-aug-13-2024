@@ -1,4 +1,4 @@
-import { draftMode } from 'next/headers'
+import { draftMode, headers } from 'next/headers'
 import { agilityConfig } from "@agility/nextjs"
 
 /**
@@ -15,9 +15,13 @@ export const getAgilityContext = () => {
 	//determine whether it's preview or dev mode
 	const isPreview = isEnabled || isDevelopmentMode
 
+	//the locale should be set in middleware...
+	const locale = (headers().get("x-locale") as string) || "en-us"
+
+
 	return {
 		locales: agilityConfig.locales,
-		locale: "en-us",
+		locale,
 		sitemap: agilityConfig.channelName,
 		isPreview,
 		isDevelopmentMode

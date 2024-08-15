@@ -1,5 +1,5 @@
-import {draftMode, headers} from "next/headers"
-import LoadingWidget from "components/common/LoadingWidget"
+import {draftMode} from "next/headers"
+
 import PreviewBar from "components/common/PreviewBar"
 import SiteFooter from "components/common/SiteFooter"
 import SiteHeader from "components/common/SiteHeader"
@@ -12,7 +12,6 @@ import "/styles/globals.css"
 
 import {getHeaderContent} from "lib/cms-content/getHeaderContent"
 import {redirect} from "next/navigation"
-import {NextRequest} from "next/server"
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -20,10 +19,6 @@ const inter = Inter({
 })
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
-	const headersList = headers()
-	const localeFromHeader = headersList.get("x-locale")
-	console.log("localeFromHeader (layout)", localeFromHeader)
-
 	const {locale, sitemap, isDevelopmentMode, isPreview} = useAgilityContext()
 
 	const header = await getHeaderContent({sitemap, locale})

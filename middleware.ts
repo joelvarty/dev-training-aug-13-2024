@@ -57,25 +57,25 @@ export async function middleware(request: NextRequest) {
 
 
 		//if we are NOT redirecting, we can continue with the request and check for locale
-		const host = request.nextUrl.host
-		console.log("url", request.nextUrl.href)
-		console.log("setting header for locale to fr")
 
-		request.cookies.set('x-locale', 'fr')
-		request.headers.set('x-locale', 'fr')
-		//todo: handle the `lang` querystring parameter
-		if (host === "fr.mysite.com") {
-			// Add new request headers
-			request.headers.set('x-locale', 'fr')
+		//derive the locale from eithet the HOST name or the lang querystring
+		const host = request.nextUrl.host
+
+		let locale: string | null = null
+		//TODO: determine the host to locale mapping
+
+		//check the querystring for the language code (Agility adds this when you click preview)
+		if (request.nextUrl.searchParams.has("lang")) {
+			locale = request.nextUrl.searchParams.get("lang") as string
 		}
 
-		// You can also set request headers in NextResponse.next
 
-		const response = NextResponse.next();
-		response.headers.set('x-locale', 'fr-res');
-
-
-		return response
+		//if we have a locale, set the header
+		if (locale) {
+			const response = NextResponse.next();
+			response.headers.set('x-locale', 'fr');
+			return response
+		}
 	}
 
 
