@@ -32,10 +32,10 @@ export const getPostListing = async ({ sitemap, locale, skip, take }: LoadPostsP
 
 	try {
 		// get sitemap...
-		let sitemapNodes = await getSitemapFlat({
-			channelName: sitemap,
-			languageCode: locale,
-		})
+		// let sitemapNodes = await getSitemapFlat({
+		// 	channelName: sitemap,
+		// 	languageCode: locale,
+		// })
 
 		// get posts...
 		let rawPosts: ContentList = await getContentList({
@@ -47,7 +47,7 @@ export const getPostListing = async ({ sitemap, locale, skip, take }: LoadPostsP
 		})
 
 		// resolve dynamic urls
-		const dynamicUrls = resolvePostUrls(sitemapNodes, rawPosts.items)
+		//const dynamicUrls = resolvePostUrls(sitemapNodes, rawPosts.items)
 
 		const posts: IPostMin[] = rawPosts.items.map((post: any) => {
 			//category
@@ -57,13 +57,8 @@ export const getPostListing = async ({ sitemap, locale, skip, take }: LoadPostsP
 			const date = DateTime.fromJSDate(new Date(post.fields.date)).toFormat("LLL. dd, yyyy")
 
 			// url
-			const url = dynamicUrls[post.contentID] || "#"
+			const url = `/blog/${post.fields.slug}`  // dynamicUrls[post.contentID] || "#"
 
-			// post image src
-			let imageSrc = post.fields.image.url
-
-			// post image alt
-			let imageAlt = post.fields.image?.label || null
 
 			return {
 				contentID: post.contentID,

@@ -10,6 +10,7 @@ export const getAgilityContext = () => {
 	const { isEnabled } = draftMode()
 
 	const isDevelopmentMode = process.env.NODE_ENV === "development"
+	//todo: determine the locale....
 
 	//determine whether it's preview or dev mode
 	const isPreview = isEnabled || isDevelopmentMode

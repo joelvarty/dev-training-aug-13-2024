@@ -6,6 +6,8 @@ import { getDynamicPageURL } from "@agility/nextjs/node"
 export async function middleware(request: NextRequest) {
 
 
+
+
 	/*****************************
 	 * *** AGILITY MIDDLEWARE ***
 	 * 1: Check if this is a preview request,
@@ -51,8 +53,28 @@ export async function middleware(request: NextRequest) {
 				return NextResponse.redirect(redirectUrl)
 			}
 		}
-	}
+	} else {
 
+
+		//if we are NOT redirecting, we can continue with the request and check for locale
+		const host = request.nextUrl.host
+
+		const requestHeaders = new Headers(request.headers)
+		requestHeaders.set('x-locale', 'fr')
+
+		if (host === "fr.mysite.com") {
+			// Add new request headers
+			requestHeaders.set('x-locale', 'fr')
+		}
+
+		// You can also set request headers in NextResponse.rewrite
+		return NextResponse.next({
+			request: {
+				// New request headers
+				headers: requestHeaders,
+			},
+		})
+	}
 
 
 

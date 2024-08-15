@@ -1,11 +1,11 @@
-import React from "react"
+import React, {useEffect} from "react"
 import Link from "next/link"
 
 import {IPostMin, getPostListing} from "lib/cms-content/getPostListing"
 import {useAgilityContext} from "lib/cms/useAgilityContext"
 import PostListingClient from "./PostsListing.client"
 import {getContentItem} from "lib/cms/getContentItem"
-import {UnloadedModuleProps} from "@agility/nextjs"
+import {AgilityPic, UnloadedModuleProps} from "@agility/nextjs"
 import {DateTime} from "luxon"
 
 interface IPostListing {
@@ -19,7 +19,7 @@ export interface GetNextPostsProps {
 	take: number
 }
 
-const PostListing = async ({module, languageCode}: UnloadedModuleProps) => {
+const PostListing = async ({module, languageCode, globalData}: UnloadedModuleProps) => {
 	const {sitemap, locale} = useAgilityContext()
 
 	// get posts for the initial page load

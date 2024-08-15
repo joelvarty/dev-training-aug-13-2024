@@ -6,13 +6,14 @@ interface RichText {
 }
 
 const RichTextArea = async ({module, languageCode}: UnloadedModuleProps) => {
-	const {
-		fields: {textblob},
-		contentID,
-	} = await getContentItem<RichText>({
+	const contentItem = await getContentItem<RichText>({
 		contentID: module.contentid,
 		languageCode,
 	})
+
+	const {fields, contentID} = contentItem
+
+	const {textblob} = fields
 
 	return (
 		<section id={`${contentID}`} className="relative px-8" data-agility-component={contentID}>

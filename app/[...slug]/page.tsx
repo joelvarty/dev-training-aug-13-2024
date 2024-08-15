@@ -8,6 +8,7 @@ import {resolveAgilityMetaData} from "lib/cms-content/resolveAgilityMetaData"
 import NotFound from "./not-found"
 import InlineError from "components/common/InlineError"
 import {cacheConfig} from "lib/cms/cacheConfig"
+import {headers} from "next/headers"
 
 export const revalidate = cacheConfig.pathRevalidateDuration
 export const runtime = "nodejs"
@@ -20,6 +21,11 @@ export async function generateMetadata(
 	{params, searchParams}: PageProps,
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
+	const headersList = headers()
+
+	const localeFromHeader = headersList.get("x-locale")
+	console.log("localeFromHeader", localeFromHeader)
+
 	// read route params
 	const {locale, sitemap, isDevelopmentMode, isPreview} = getAgilityContext()
 
@@ -30,8 +36,12 @@ export async function generateMetadata(
 }
 
 export default async function Page({params, searchParams}: PageProps) {
+	// get agility context
+
 	//const {isPreview} = getAgilityContext()
 	const agilityData = await getAgilityPage({params})
+	agilityData.globalData = agilityData.globalData || {}
+	agilityData.globalData = {...agilityData.globalData, searchParams}
 
 	//if the page is not found...
 	if (!agilityData.page) return NotFound()
