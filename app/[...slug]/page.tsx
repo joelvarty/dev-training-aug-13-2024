@@ -8,7 +8,7 @@ import {resolveAgilityMetaData} from "lib/cms-content/resolveAgilityMetaData"
 import NotFound from "./not-found"
 import InlineError from "components/common/InlineError"
 import {cacheConfig} from "lib/cms/cacheConfig"
-import {headers} from "next/headers"
+import {headers, cookies} from "next/headers"
 
 export const revalidate = cacheConfig.pathRevalidateDuration
 export const runtime = "nodejs"
@@ -21,11 +21,6 @@ export async function generateMetadata(
 	{params, searchParams}: PageProps,
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
-	const headersList = headers()
-
-	const localeFromHeader = headersList.get("x-locale")
-	console.log("localeFromHeader", localeFromHeader)
-
 	// read route params
 	const {locale, sitemap, isDevelopmentMode, isPreview} = getAgilityContext()
 
@@ -35,8 +30,23 @@ export async function generateMetadata(
 	return await resolveAgilityMetaData({agilityData, locale, sitemap, isDevelopmentMode, isPreview, parent})
 }
 
-export default async function Page({params, searchParams}: PageProps) {
+export default async function Page(props: any) {
+	const {params, searchParams}: PageProps = props
 	// get agility context
+
+	const headersList = headers()
+
+	// headersList.forEach((value, key) => {
+	// 	if (key.startsWith("x-")) {
+	// 		console.log(`header: ${key} = ${value}`)
+	// 	}
+	// })
+	console.log("props", props)
+	const localeFromHeader = headersList.get("x-locale")
+	console.log("localeFromHeader (page)", localeFromHeader)
+
+	const localeFromCookie = cookies().get("x-locale")
+	console.log("localeFromCookie", localeFromCookie)
 
 	//const {isPreview} = getAgilityContext()
 	const agilityData = await getAgilityPage({params})

@@ -1,4 +1,4 @@
-import {draftMode} from "next/headers"
+import {draftMode, headers} from "next/headers"
 import LoadingWidget from "components/common/LoadingWidget"
 import PreviewBar from "components/common/PreviewBar"
 import SiteFooter from "components/common/SiteFooter"
@@ -20,6 +20,10 @@ const inter = Inter({
 })
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
+	const headersList = headers()
+	const localeFromHeader = headersList.get("x-locale")
+	console.log("localeFromHeader (layout)", localeFromHeader)
+
 	const {locale, sitemap, isDevelopmentMode, isPreview} = useAgilityContext()
 
 	const header = await getHeaderContent({sitemap, locale})

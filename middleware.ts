@@ -58,26 +58,44 @@ export async function middleware(request: NextRequest) {
 
 		//if we are NOT redirecting, we can continue with the request and check for locale
 		const host = request.nextUrl.host
+		console.log("url", request.nextUrl.href)
+		console.log("setting header for locale to fr")
 
-		const requestHeaders = new Headers(request.headers)
-		requestHeaders.set('x-locale', 'fr')
-
+		request.cookies.set('x-locale', 'fr')
+		request.headers.set('x-locale', 'fr')
+		//todo: handle the `lang` querystring parameter
 		if (host === "fr.mysite.com") {
 			// Add new request headers
-			requestHeaders.set('x-locale', 'fr')
+			request.headers.set('x-locale', 'fr')
 		}
 
-		// You can also set request headers in NextResponse.rewrite
-		return NextResponse.next({
-			request: {
-				// New request headers
-				headers: requestHeaders,
-			},
-		})
+		// You can also set request headers in NextResponse.next
+
+		const response = NextResponse.next();
+		response.headers.set('x-locale', 'fr-res');
+
+
+		return response
 	}
 
 
 
 
 
+}
+
+
+export const config = {
+	matcher: [
+		/*
+		 * Match all request paths except for the ones starting with:
+		 * - api (API routes)
+		 * - _next/static (static files)
+		 * - _next/image (image optimization files)
+		 * - static assets (assets folder)
+		 * - favicon.ico (favicon file)
+		 */
+		"/((?!api|_next/static|_next/image|assets/|favicon.ico).*)",
+
+	]
 }
