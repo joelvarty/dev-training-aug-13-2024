@@ -20,6 +20,7 @@ export const getAgilityPage = async ({ params }: PageProps) => {
 	if (!params.slug) params.slug = [""]
 
 	const page = await getAgilityPageProps({
+
 		params, preview, locale, apiOptions: {
 			contentLinkDepth: 0
 		}

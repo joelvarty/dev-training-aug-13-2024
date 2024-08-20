@@ -2,6 +2,7 @@ import React from "react"
 import {AgilityPic, UnloadedModuleProps, renderHTML} from "@agility/nextjs"
 
 import {DateTime} from "luxon"
+import {IPost} from "lib/types/IPost"
 
 const PostDetails = async ({dynamicPageItem}: UnloadedModuleProps) => {
 	if (!dynamicPageItem) {
@@ -9,7 +10,7 @@ const PostDetails = async ({dynamicPageItem}: UnloadedModuleProps) => {
 	}
 
 	// post fields
-	const post = dynamicPageItem.fields
+	const post = dynamicPageItem.fields as IPost
 
 	// category
 	const category = post.category?.fields.title || "Uncategorized"

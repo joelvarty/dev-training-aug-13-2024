@@ -95,9 +95,11 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, sitemap, isD
 	//#endregion
 
 
+	console.log("title", agilityData.page?.title, agilityData.sitemapNode?.title)
+
 
 	const metaData: Metadata = {
-		metadataBase: new URL('https://preview-tests-nov-2023.vercel.app'),
+		metadataBase: new URL("https://www.example.com"),
 		title: `${agilityData.sitemapNode?.title} | ${header?.siteName || ""}`,
 		description: agilityData.page?.seo?.metaDescription,
 		keywords: agilityData.page?.seo?.metaKeywords,
@@ -106,7 +108,8 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, sitemap, isD
 		},
 
 		generator: `Agility CMS`,
-		other: otherMetaData
+		other: otherMetaData,
+
 
 	}
 

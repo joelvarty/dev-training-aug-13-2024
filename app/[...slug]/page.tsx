@@ -8,6 +8,7 @@ import {resolveAgilityMetaData} from "lib/cms-content/resolveAgilityMetaData"
 import NotFound from "./not-found"
 import InlineError from "components/common/InlineError"
 import {cacheConfig} from "lib/cms/cacheConfig"
+import {ContentItem} from "@agility/content-fetch"
 
 export const revalidate = cacheConfig.pathRevalidateDuration
 // export const runtime = "nodejs"
@@ -41,8 +42,45 @@ export default async function Page(props: any) {
 
 	const AgilityPageTemplate = getPageTemplate(agilityData.pageTemplateName || "")
 
+	const dymamicPageItem = agilityData.dynamicPageItem as ContentItem<any> | undefined
+	/**
+	 * Determin any json-ld schema data for this page
+	 * https://nextjs.org/docs/app/building-your-application/optimizing/metadata#json-ld
+	 */
+	let structData: any = null
+
+	if (dymamicPageItem?.properties.definitionName === "Post") {
+		structData = {
+			"@context": "https://schema.org",
+			"@type": "NewsArticle",
+			mainEntityOfPage: {
+				"@type": "WebPage",
+				"@id": "https://google.com/article",
+			},
+			headline: dymamicPageItem.fields.title,
+			datePublished: dymamicPageItem.fields.date,
+			dateModified: dymamicPageItem.fields.date,
+
+			publisher: {
+				"@type": "Organization",
+				name: "Agility CMS",
+				logo: {
+					"@type": "ImageObject",
+					url: "https://static.agilitycms.com/brand/logo_combined_yellow_gray.png",
+				},
+			},
+			image: [],
+		}
+		if (dymamicPageItem.fields.image) {
+			structData.image = [dymamicPageItem.fields.image.url]
+		}
+	}
+
 	return (
 		<div data-agility-page={agilityData.page?.pageID} data-agility-dynamic-content={agilityData.sitemapNode.contentID}>
+			{structData && (
+				<script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(structData)}} />
+			)}
 			{AgilityPageTemplate && <AgilityPageTemplate {...agilityData} />}
 			{!AgilityPageTemplate && (
 				// if we don't have a template for this page, show an error
