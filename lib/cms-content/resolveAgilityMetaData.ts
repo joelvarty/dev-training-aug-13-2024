@@ -95,8 +95,6 @@ export const resolveAgilityMetaData = async ({ agilityData, locale, sitemap, isD
 	//#endregion
 
 
-	console.log("title", agilityData.page?.title, agilityData.sitemapNode?.title)
-
 
 	const metaData: Metadata = {
 		metadataBase: new URL("https://www.example.com"),
