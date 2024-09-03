@@ -58,17 +58,17 @@ export async function middleware(request: NextRequest) {
 
 		//if we are NOT redirecting, we can continue with the request and check for locale
 
-		//derive the locale from eithet the HOST name or the lang querystring
+		//derive the locale from eithet the HOST name, the path or the lang querystring
 		const host = request.nextUrl.host
 
+		//IF YOU ARE DOING HOST BASED LOCALE MAPPING (locale.mysite.com)
 		let locale: string | null = null
 		//TODO: determine the host to locale mapping
 
-		//check the querystring for the language code (Agility adds this when you click preview)
+		//ALSO check the querystring for the language code (Agility adds this when you click preview)
 		if (request.nextUrl.searchParams.has("lang")) {
 			locale = request.nextUrl.searchParams.get("lang") as string
 		}
-
 
 		//if we have a locale, set the header
 		if (locale) {
@@ -76,6 +76,8 @@ export async function middleware(request: NextRequest) {
 			response.headers.set('x-locale', 'fr');
 			return response
 		}
+
+		//IF WE ARE DOING PATH BASED 
 	}
 
 
