@@ -77,7 +77,27 @@ export async function middleware(request: NextRequest) {
 			return response
 		}
 
-		//IF WE ARE DOING PATH BASED 
+		//IF WE ARE DOING PATH BASED LOCALE MAPPING
+		const path = request.nextUrl.pathname
+
+		const locales = ["en", "fr"]
+
+		const possibleLocale = path.split("/")[1]
+		if (locales.includes(possibleLocale)) {
+			locale = possibleLocale
+
+			//set the locale header and rewrite the path
+			const actualPath = path.replace(`/${possibleLocale}`, "")
+
+			return NextResponse.rewrite(actualPath, {
+				request: {
+					headers: new Headers({
+						"x-locale": locale
+					})
+				}
+			})
+
+		}
 	}
 
 
