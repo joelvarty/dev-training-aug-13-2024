@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getDynamicPageURL } from "@agility/nextjs/node"
+import { agilityConfig } from '@agility/nextjs'
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
@@ -54,18 +55,20 @@ export async function middleware(request: NextRequest) {
 			}
 		}
 	} else {
-
+		/******************
+		 * LOCALE LOGIC *
+		 ******************/
 
 		//if we are NOT redirecting, we can continue with the request and check for locale
 
 		//derive the locale from eithet the HOST name, the path or the lang querystring
 		const host = request.nextUrl.host
 
-		//IF YOU ARE DOING HOST BASED LOCALE MAPPING (locale.mysite.com)
+		//IF YOU ARE DOING HOST BASED LOCALE MAPPING (fr-ca.mysite.com)
 		let locale: string | null = null
-		//TODO: determine the host to locale mapping
+		//TODO: determine the host to locale mapping eg: if host is fr-ca.mysite.com, then locale is fr-ca
 
-		//ALSO check the querystring for the language code (Agility adds this when you click preview)
+		//ALSO check the querystring for the language code (Agility adds this when you click preview) eg: ?lang=fr-ca
 		if (request.nextUrl.searchParams.has("lang")) {
 			locale = request.nextUrl.searchParams.get("lang") as string
 		}
@@ -78,9 +81,10 @@ export async function middleware(request: NextRequest) {
 		}
 
 		//IF WE ARE DOING PATH BASED LOCALE MAPPING
+		//eg: /fr-ca/about-us
 		const path = request.nextUrl.pathname
 
-		const locales = ["en-us", "fr-ca"]
+		const locales = agilityConfig.locales
 
 		const possibleLocale = path.split("/")[1]
 		if (locales.includes(possibleLocale)) {
