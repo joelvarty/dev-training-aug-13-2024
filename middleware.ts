@@ -80,7 +80,7 @@ export async function middleware(request: NextRequest) {
 		//IF WE ARE DOING PATH BASED LOCALE MAPPING
 		const path = request.nextUrl.pathname
 
-		const locales = ["en", "fr"]
+		const locales = ["en-us", "fr-ca"]
 
 		const possibleLocale = path.split("/")[1]
 		if (locales.includes(possibleLocale)) {
